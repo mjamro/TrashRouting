@@ -75,11 +75,6 @@ namespace TrashRouting.API
 
         public void RegisterForwarder<T>(IServiceCollection services, string serviceName)
         {
-            services.AddTransient<T>(c =>
-            {
-                new RestClient()
-                }
-            )
         }
     }
 }
