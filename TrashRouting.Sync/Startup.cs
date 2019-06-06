@@ -63,6 +63,14 @@ namespace TrashRouting.Sync
                 Tags = new[] { "Sync", "Algorithm" }
             };
 
+            var healthCheck = new AgentServiceCheck
+            {
+                Interval = TimeSpan.FromSeconds(10.0),
+                DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(30.0),
+                HTTP = $"{uri.Scheme}://{uri.Host}:{uri.Port}/{Configuration["Consul:PingEndpoint"]}"
+            };
+            registration.Checks = new[] { healthCheck };
+
             consulClient.Agent.ServiceDeregister(registration.ID).Wait();
             consulClient.Agent.ServiceRegister(registration).Wait();
 
