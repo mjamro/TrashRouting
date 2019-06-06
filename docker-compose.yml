@@ -1,0 +1,51 @@
+version: "3.5"
+
+services:
+  trash-routing-api:
+    build:
+      context: ./TrashRouting.Api/
+      dockerfile: ./Dockerfile
+    ports:
+      - '5000:5000'
+    networks:
+      - trashRouting
+    environment:
+      - 'EXAMPLEVARIABLE=example'
+
+  trash-routing-cluster:
+    build:
+      context: ./TrashRouting.Cluster/
+      dockerfile: ./Dockerfile
+    ports:
+      - '5001:5000'  
+    networks:
+      - trashRouting
+    environment:
+      - 'EXAMPLEVARIABLE=example'
+      
+  trash-routing-routes:
+    build:
+      context: ./TrashRouting.Routes/
+      dockerfile: ./Dockerfile
+    ports:
+      - '5002:5000'  
+    networks:
+      - trashRouting
+    environment:
+      - 'EXAMPLEVARIABLE=example'
+      
+  trash-routing-sync:
+    build:
+      context: ./TrashRouting.Sync/
+      dockerfile: ./Dockerfile
+    ports:
+      - '5003:5000'  
+    networks:
+      - trashRouting
+    environment:
+      - 'EXAMPLEVARIABLE=example'
+
+networks:
+  trashRouting:
+    name: trashRouting-network
+    external: true

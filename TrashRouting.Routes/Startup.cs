@@ -80,7 +80,7 @@ namespace TrashRouting.Routes
                 Name = Configuration["Consul:ServiceName"],
                 Address = $"{uri.Scheme}://{uri.Host}",
                 Port = uri.Port,
-                Tags = new[] { "Students", "Courses", "School" }
+                Tags = new[] { "Routes", "Algorithm" }
             };
 
             consulClient.Agent.ServiceDeregister(registration.ID).Wait();

@@ -57,7 +57,7 @@ namespace TrashRouting.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -71,10 +71,34 @@ namespace TrashRouting.API
 
             app.UseHttpsRedirection();
             app.UseMvc();
-        }
 
-        public void RegisterForwarder<T>(IServiceCollection services, string serviceName)
+            RegisterWithConsul(app, lifetime);
+        }
+        // Reg
+        public IApplicationBuilder RegisterWithConsul(IApplicationBuilder app,
+         IApplicationLifetime lifetime)
         {
+            var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
+
+            var uri = new Uri(Configuration["Consul:ServiceAddress"]);
+            var registration = new AgentServiceRegistration()
+            {
+                ID = $"{Configuration["Consul:ServiceID"]}-{uri.Port}",
+                Name = Configuration["Consul:ServiceName"],
+                Address = $"{uri.Scheme}://{uri.Host}",
+                Port = uri.Port,
+                Tags = new[] { "API", "Algorithm" }
+            };
+
+            consulClient.Agent.ServiceDeregister(registration.ID).Wait();
+            consulClient.Agent.ServiceRegister(registration).Wait();
+
+            lifetime.ApplicationStopping.Register(() =>
+            {
+                consulClient.Agent.ServiceDeregister(registration.ID).Wait();
+            });
+
+            return app;
         }
     }
 }

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using System;
 
 namespace TrashRouting.Sync
 {
@@ -25,11 +20,17 @@ namespace TrashRouting.Sync
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
+            {
+                var address = Configuration["Consul:Address"];
+                consulConfig.Address = new Uri(address);
+            }));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -43,6 +44,34 @@ namespace TrashRouting.Sync
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            RegisterWithConsul(app, lifetime);
+        }
+
+        public IApplicationBuilder RegisterWithConsul(IApplicationBuilder app,
+         IApplicationLifetime lifetime)
+        {
+            var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
+
+            var uri = new Uri(Configuration["Consul:ServiceAddress"]);
+            var registration = new AgentServiceRegistration()
+            {
+                ID = $"{Configuration["Consul:ServiceID"]}-{uri.Port}",
+                Name = Configuration["Consul:ServiceName"],
+                Address = $"{uri.Scheme}://{uri.Host}",
+                Port = uri.Port,
+                Tags = new[] { "Sync", "Algorithm" }
+            };
+
+            consulClient.Agent.ServiceDeregister(registration.ID).Wait();
+            consulClient.Agent.ServiceRegister(registration).Wait();
+
+            lifetime.ApplicationStopping.Register(() =>
+            {
+                consulClient.Agent.ServiceDeregister(registration.ID).Wait();
+            });
+
+            return app;
         }
     }
 }
