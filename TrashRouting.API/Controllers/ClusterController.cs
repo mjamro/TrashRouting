@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Consul;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
+using System.Linq;
+using System.Threading.Tasks;
 using TrashRouting.API.Contracts;
 using TrashRouting.API.Models;
 
@@ -16,9 +14,12 @@ namespace TrashRouting.API.Controllers
     {
         private readonly IClusterService clusterService;
 
-        public ClusterController()
+        public ClusterController(IConsulClient consulClient)
         {
-            clusterService = RestClient.For<IClusterService>("http://localhost:5001");
+            var query = consulClient.Catalog.Service("service-cluster").GetAwaiter().GetResult();
+            var serviceInstance = query.Response.First();
+            clusterService = RestClient
+                .For<IClusterService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
         }
 
         public async Task<ClusterAlgData> GetClusterAlgData() 

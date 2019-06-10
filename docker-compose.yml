@@ -6,7 +6,7 @@ services:
       context: ./TrashRouting.Api/
       dockerfile: ./Dockerfile
     ports:
-      - '5000:5000'
+      - '5001:80'
     networks:
       - trashRouting
     environment:
@@ -17,7 +17,18 @@ services:
       context: ./TrashRouting.Cluster/
       dockerfile: ./Dockerfile
     ports:
-      - '5001:5000'  
+      - '5010:80'  
+    networks:
+      - trashRouting
+    environment:
+      - 'EXAMPLEVARIABLE=example'
+      
+  trash-routing-cluster:
+    build:
+      context: ./TrashRouting.Cluster/
+      dockerfile: ./Dockerfile
+    ports:
+      - '5011:80'  
     networks:
       - trashRouting
     environment:
@@ -28,7 +39,7 @@ services:
       context: ./TrashRouting.Routes/
       dockerfile: ./Dockerfile
     ports:
-      - '5002:5000'  
+      - '5020:80'  
     networks:
       - trashRouting
     environment:
@@ -39,7 +50,7 @@ services:
       context: ./TrashRouting.Sync/
       dockerfile: ./Dockerfile
     ports:
-      - '5003:5000'  
+      - '5030:80'  
     networks:
       - trashRouting
     environment:

@@ -1,0 +1,16 @@
+version: "3.5"
+
+services:
+  trash-routing-cluster:
+    build:
+      context: ./TrashRouting.Cluster/
+      dockerfile: ./Dockerfile
+    ports:
+      - '5010:80'  
+      
+  trash-routing-cluster:
+    build:
+      context: ./TrashRouting.Cluster/
+      dockerfile: ./Dockerfile
+    ports:
+      - '5011:80'  
