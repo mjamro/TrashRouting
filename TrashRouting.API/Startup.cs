@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Consul;
+﻿using Consul;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RestEase;
+using System;
+using System.Text;
 
 namespace TrashRouting.API
 {
@@ -74,7 +67,7 @@ namespace TrashRouting.API
 
             RegisterWithConsul(app, lifetime);
         }
-        // Reg
+
         public IApplicationBuilder RegisterWithConsul(IApplicationBuilder app,
          IApplicationLifetime lifetime)
         {

@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		consul.yml = consul.yml
 		docker-cluster.yml = docker-cluster.yml
 		docker-compose.yml = docker-compose.yml
+		dotnet-run-all.sh = dotnet-run-all.sh
 	EndProjectSection
 EndProject
 Global
