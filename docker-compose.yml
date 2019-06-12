@@ -6,7 +6,7 @@ services:
       context: ./TrashRouting.Api/
       dockerfile: ./Dockerfile
     ports:
-      - '5001:80'
+      - '5000:80'
     networks:
       - trashRouting
     environment:
