@@ -17,9 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-cluster.yml = docker-cluster.yml
 		docker-compose.yml = docker-compose.yml
 		dotnet-run-all.sh = dotnet-run-all.sh
+		rabbit.yml = rabbit.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrashRouting.Common", "TrashRouting.Common\TrashRouting.Common.csproj", "{5E28A6D3-2BB7-4DF9-A8ED-C86D5E096A20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrashRouting.Common", "TrashRouting.Common\TrashRouting.Common.csproj", "{5E28A6D3-2BB7-4DF9-A8ED-C86D5E096A20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
