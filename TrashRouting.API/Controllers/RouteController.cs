@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using TrashRouting.API.Commands;
 using TrashRouting.API.Contracts;
 using TrashRouting.API.Models;
 
@@ -16,7 +17,7 @@ namespace TrashRouting.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
         private readonly IRouteService routeService;
@@ -47,21 +48,20 @@ namespace TrashRouting.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<Route>> GetRoutes()
         {
-            routeService.Authorization = new AuthenticationHeaderValue(
-                JwtBearerDefaults.AuthenticationScheme,
-                Request.Headers["Authorization"].ToString().Substring(7));
+            //routeService.Authorization = new AuthenticationHeaderValue(
+            //    JwtBearerDefaults.AuthenticationScheme,
+            //    Request.Headers["Authorization"].ToString().Substring(7));
             return await routeService.GetRoutes();
         }
 
         [HttpGet("{id}")]
         public async Task<Route> GetRouteById(int id)
         {
-            routeService.Authorization = new AuthenticationHeaderValue(
-                JwtBearerDefaults.AuthenticationScheme,
-                Request.Headers["Authorization"].ToString().Substring(7));
+            //routeService.Authorization = new AuthenticationHeaderValue(
+            //    JwtBearerDefaults.AuthenticationScheme,
+            //    Request.Headers["Authorization"].ToString().Substring(7));
+
             return await routeService.GetRouteById(id);
         }
-
-
     }
 }
