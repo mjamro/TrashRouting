@@ -28,11 +28,7 @@ namespace TrashRouting.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
-            {
-                var address = Configuration["Consul:Address"];
-                consulConfig.Address = new Uri(address);
-            }));
+            services.AddConsul();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -82,41 +78,7 @@ namespace TrashRouting.API
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            RegisterWithConsul(app, lifetime);
-        }
-
-        public IApplicationBuilder RegisterWithConsul(IApplicationBuilder app,
-         IApplicationLifetime lifetime)
-        {
-            var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
-
-            var uri = new Uri(Configuration["Consul:ServiceAddress"]);
-            var registration = new AgentServiceRegistration()
-            {
-                ID = $"{Configuration["Consul:ServiceID"]}-{uri.Port}",
-                Name = Configuration["Consul:ServiceName"],
-                Address = $"{uri.Scheme}://{uri.Host}",
-                Port = uri.Port,
-                Tags = new[] { "API", "Algorithm" }
-            };
-
-            var healthCheck = new AgentServiceCheck
-            {
-                Interval = TimeSpan.FromSeconds(10.0),
-                DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(30.0),
-                HTTP = $"{uri.Scheme}://{uri.Host}:{uri.Port}/{Configuration["Consul:PingEndpoint"]}"
-            };
-            registration.Checks = new[] { healthCheck };
-
-            consulClient.Agent.ServiceDeregister(registration.ID).Wait();
-            consulClient.Agent.ServiceRegister(registration).Wait();
-
-            lifetime.ApplicationStopping.Register(() =>
-            {
-                consulClient.Agent.ServiceDeregister(registration.ID).Wait();
-            });
-
-            return app;
+            app.UseConsul(lifetime);
         }
     }
 }
