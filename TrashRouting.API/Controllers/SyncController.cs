@@ -10,7 +10,7 @@ using TrashRouting.Common.RabbitMQ;
 
 namespace TrashRouting.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class SyncController : ControllerBase
     {

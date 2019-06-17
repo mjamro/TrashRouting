@@ -11,10 +11,10 @@ namespace TrashRouting.API.Contracts
         [Header("Authorization")]
         AuthenticationHeaderValue Authorization { get; set; }
 
-        [Get("api/route")]
-        Task<IEnumerable<Route>> GetRoutes();
+        [Get("route/list")]
+        Task<IEnumerable<Route>> Routes();
 
-        [Get("api/route/{id}")]
-        Task<Route> GetRouteById([Path] int id);
+        [Get("route/{id}")]
+        Task<Route> RouteById([Path] int id);
     }
 }

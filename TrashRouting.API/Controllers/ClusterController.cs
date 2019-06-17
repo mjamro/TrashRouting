@@ -8,7 +8,7 @@ using TrashRouting.API.Models;
 
 namespace TrashRouting.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ClusterController : ControllerBase
     {
@@ -22,8 +22,16 @@ namespace TrashRouting.API.Controllers
                 .For<IClusterService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
         }
 
-        public async Task<ClusterAlgData> GetClusterAlgData() 
-            => await clusterService.GetClusterAlgData();
+        [HttpGet("algdata")]
+        public async Task<ClusterAlgData> AlgData() 
+            => await clusterService.AlgData();
 
+        [HttpGet("point/{id}")]
+        public async Task<Point> Point(int id)
+            => await clusterService.Point(id);
+
+        [HttpGet("riskypoint/{id}")]
+        public async Task<Point> RiskyPoint(int id)
+            => await clusterService.RiskyPoint(id);
     }
 }

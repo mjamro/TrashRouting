@@ -15,7 +15,7 @@ using TrashRouting.API.Models;
 
 namespace TrashRouting.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     //[Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
@@ -45,23 +45,23 @@ namespace TrashRouting.API.Controllers
                 .For<IRouteService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<Route>> GetRoutes()
+        [HttpGet("list")]
+        public async Task<IEnumerable<Route>> List()
         {
             //routeService.Authorization = new AuthenticationHeaderValue(
             //    JwtBearerDefaults.AuthenticationScheme,
             //    Request.Headers["Authorization"].ToString().Substring(7));
-            return await routeService.GetRoutes();
+            return await routeService.Routes();
         }
 
         [HttpGet("{id}")]
-        public async Task<Route> GetRouteById(int id)
+        public async Task<Route> RouteById(int id)
         {
             //routeService.Authorization = new AuthenticationHeaderValue(
             //    JwtBearerDefaults.AuthenticationScheme,
             //    Request.Headers["Authorization"].ToString().Substring(7));
 
-            return await routeService.GetRouteById(id);
+            return await routeService.RouteById(id);
         }
     }
 }

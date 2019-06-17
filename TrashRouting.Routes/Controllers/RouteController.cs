@@ -1,20 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using TrashRouting.Routes.Models;
 
 namespace TrashRouting.Routes.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<Route> GetRouteById(int id)
+        public async Task<Route> Route(int id)
         {
             return new Route()
             {
@@ -36,9 +34,8 @@ namespace TrashRouting.Routes.Controllers
             };
         }
 
-        [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<IEnumerable<Route>> GetRoutes()
+        [HttpGet("list")]
+        public async Task<IEnumerable<Route>> List()
         {
             return new List<Route>()
             {

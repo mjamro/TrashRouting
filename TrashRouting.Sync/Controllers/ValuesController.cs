@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TrashRouting.Sync.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {

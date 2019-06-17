@@ -6,7 +6,13 @@ namespace TrashRouting.API.Contracts
 {
     public interface IClusterService 
     {
-        [Get("api/cluster")]
-        Task<ClusterAlgData> GetClusterAlgData();
+        [Get("cluster/algdata")]
+        Task<ClusterAlgData> AlgData();
+
+        [Get("cluster/point/{id}")]
+        Task<Point> Point([Path] int id);
+
+        [Get("cluster/riskypoint/{id}")]
+        Task<Point> RiskyPoint([Path] int id);
     }
 }

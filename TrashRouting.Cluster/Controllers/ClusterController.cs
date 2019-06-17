@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrashRouting.Cluster.Models;
 
 namespace TrashRouting.Cluster.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ClusterController : ControllerBase
     {
-        public async Task<ClusterAlgData> GetClusterAlgData()
+        [HttpGet("algdata")]
+        public async Task<ClusterAlgData> AlgData()
         {
             return new ClusterAlgData()
             {
@@ -50,6 +52,32 @@ namespace TrashRouting.Cluster.Controllers
 
                     }
                 }
+            };
+        }
+
+        [HttpGet("point/{id}")]
+        public async Task<Point> Point(int id)
+        {
+            return new Point
+            {
+                Id = id,
+                Type = "attraction",
+                Latitude = 52.53223,
+                Longitude = 23.24135
+            };
+        }
+
+        [HttpGet("riskypoint/{id}")]
+        public async Task<Point> RiskyPoint(int id)
+        {
+            if (id > 5)
+                throw new Exception("Getting point from database failed.");
+            return new Point
+            {
+                Id = id,
+                Type = "attraction",
+                Latitude = 52.53223,
+                Longitude = 23.24135
             };
         }
     }
