@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TrashRouting.Cluster.Commands;
 using TrashRouting.Cluster.Models;
 
 namespace TrashRouting.Cluster.Controllers
@@ -79,6 +80,18 @@ namespace TrashRouting.Cluster.Controllers
                 Latitude = 52.53223,
                 Longitude = 23.24135
             };
+        }
+
+        [HttpPost("schedule")]
+        public async Task<IActionResult> Schedule(ScheduleClusterAlgorithmCommand command)
+        {
+            if (command.PointsNumber > 1000)
+                return StatusCode(500);
+
+            if(command.PointsNumber < 0)
+                return BadRequest();
+
+            return Ok();
         }
     }
 }

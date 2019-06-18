@@ -1,5 +1,7 @@
-﻿using RestEase;
+﻿using Microsoft.AspNetCore.Mvc;
+using RestEase;
 using System.Threading.Tasks;
+using TrashRouting.API.Commands;
 using TrashRouting.API.Models;
 
 namespace TrashRouting.API.Contracts
@@ -14,5 +16,8 @@ namespace TrashRouting.API.Contracts
 
         [Get("cluster/riskypoint/{id}")]
         Task<Point> RiskyPoint([Path] int id);
+
+        [Post("cluster/schedule")]
+        Task<IActionResult> Schedule([Body] ScheduleClusterAlgorithmCommand command);
     }
 }
