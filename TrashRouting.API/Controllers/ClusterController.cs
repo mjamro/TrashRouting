@@ -42,7 +42,8 @@ namespace TrashRouting.API.Controllers
                 .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
                 .ExecuteAsync(async () =>
                 {
-                    return await clusterService.Schedule(command);
+                    var response = await clusterService.Schedule(command);
+                    return StatusCode((int)response.ResponseMessage.StatusCode);
                 });
         }
 

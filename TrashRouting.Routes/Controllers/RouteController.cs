@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TrashRouting.Common.RabbitMQ;
+using TrashRouting.Routes.Commands;
 using TrashRouting.Routes.Models;
 
 namespace TrashRouting.Routes.Controllers
@@ -11,6 +12,18 @@ namespace TrashRouting.Routes.Controllers
     //[Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
+        private readonly IBusPublisher busPublisher;
+
+        //public RouteController(IBusPublisher busPublisher)
+        //{
+        //    this.busPublisher = busPublisher;
+        //}
+
+        public RouteController()
+        {
+
+        }
+
         [HttpGet("{id}")]
         public async Task<Route> Route(int id)
         {
@@ -77,5 +90,15 @@ namespace TrashRouting.Routes.Controllers
             }
             };
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(AddRouteCommand command)
+        {
+            if (command.Id <= 0 )
+                return BadRequest();
+
+            return Ok();
+        }
+
     }
 }

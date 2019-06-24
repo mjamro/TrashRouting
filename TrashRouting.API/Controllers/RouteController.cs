@@ -1,13 +1,8 @@
 ﻿using Consul;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TrashRouting.API.Commands;
 using TrashRouting.API.Contracts;
@@ -25,7 +20,7 @@ namespace TrashRouting.API.Controllers
         // First phase - HARDCODING! :O ;_;
         //public RouteController()
         //{
-        //    routeService = RestClient.For<IRouteService>("http://localhost:5002");
+        //    routeService = RestClient.For<IRouteService>("http://localhost:5020");
         //}
 
 
@@ -62,6 +57,13 @@ namespace TrashRouting.API.Controllers
             //    Request.Headers["Authorization"].ToString().Substring(7));
 
             return await routeService.RouteById(id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(AddRouteCommand command)
+        {
+            var response = await routeService.Post(command);
+            return StatusCode((int)response.ResponseMessage.StatusCode);
         }
     }
 }

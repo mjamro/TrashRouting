@@ -1,7 +1,9 @@
-﻿using TrashRouting.Common.Contracts;
+﻿using TrashRouting.Common.Attributes;
+using TrashRouting.Common.Contracts;
 
 namespace TrashRouting.Routes.Commands
 {
+    [MessageNamespace("route")]
     public class AddRouteCommand : ICommand
     {
         public int Id { get; set; }

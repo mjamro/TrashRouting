@@ -29,5 +29,10 @@ namespace TrashRouting.Common.RabbitMq
         {
 
         }
+
+        public static CorrelationContext Create()
+        {
+            return new CorrelationContext();
+        }
     }
 }
