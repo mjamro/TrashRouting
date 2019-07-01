@@ -1,8 +1,11 @@
 ﻿using Consul;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestEase;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TrashRouting.API.Commands;
 using TrashRouting.API.Contracts;
@@ -12,7 +15,7 @@ namespace TrashRouting.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
         private readonly IRouteService routeService;
@@ -43,18 +46,19 @@ namespace TrashRouting.API.Controllers
         [HttpGet("list")]
         public async Task<IEnumerable<Route>> List()
         {
-            //routeService.Authorization = new AuthenticationHeaderValue(
-            //    JwtBearerDefaults.AuthenticationScheme,
-            //    Request.Headers["Authorization"].ToString().Substring(7));
+            routeService.Authorization = new AuthenticationHeaderValue(
+                JwtBearerDefaults.AuthenticationScheme,
+                Request.Headers["Authorization"].ToString().Substring(7));
+
             return await routeService.Routes();
         }
 
         [HttpGet("{id}")]
         public async Task<Route> RouteById(int id)
         {
-            //routeService.Authorization = new AuthenticationHeaderValue(
-            //    JwtBearerDefaults.AuthenticationScheme,
-            //    Request.Headers["Authorization"].ToString().Substring(7));
+            routeService.Authorization = new AuthenticationHeaderValue(
+                JwtBearerDefaults.AuthenticationScheme,
+                Request.Headers["Authorization"].ToString().Substring(7));
 
             return await routeService.RouteById(id);
         }
@@ -62,6 +66,10 @@ namespace TrashRouting.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AddRouteCommand command)
         {
+            routeService.Authorization = new AuthenticationHeaderValue(
+                JwtBearerDefaults.AuthenticationScheme,
+                Request.Headers["Authorization"].ToString().Substring(7));
+
             var response = await routeService.Post(command);
             return StatusCode((int)response.ResponseMessage.StatusCode);
         }

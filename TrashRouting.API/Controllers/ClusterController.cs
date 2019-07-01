@@ -46,6 +46,5 @@ namespace TrashRouting.API.Controllers
                     return StatusCode((int)response.ResponseMessage.StatusCode);
                 });
         }
-
     }
 }

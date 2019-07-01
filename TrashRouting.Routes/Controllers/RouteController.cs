@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TrashRouting.Common.RabbitMQ;
@@ -9,7 +10,7 @@ namespace TrashRouting.Routes.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
         private readonly IBusPublisher busPublisher;

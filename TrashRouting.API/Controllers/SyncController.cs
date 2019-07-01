@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using TrashRouting.API.Commands;
 using TrashRouting.Common.RabbitMq;
 using TrashRouting.Common.RabbitMQ;
@@ -25,8 +21,7 @@ namespace TrashRouting.API.Controllers
         public async Task<IActionResult> ScheduleSynchronization(ScheduleSynchronizationCommand command)
         {
             //TODO: CorrelationContext
-            //var context = CorrelationContext.Create();
-            await busPublisher.SendAsync(command, new CorrelationContext());
+            await busPublisher.SendAsync(command, CorrelationContext.Create());
 
             return Accepted();
         }
