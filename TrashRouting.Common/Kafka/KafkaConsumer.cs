@@ -1,12 +1,10 @@
 ﻿using Confluent.Kafka;
 using Microsoft.AspNetCore.Builder;
-using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-using TrashRouting.Common.Contracts;
 using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
+using TrashRouting.Common.Contracts;
 
 namespace TrashRouting.Common.Kafka
 {
@@ -19,7 +17,6 @@ namespace TrashRouting.Common.Kafka
         {
             serviceProvider = app.ApplicationServices.GetService<IServiceProvider>();
             consumer = serviceProvider.GetService<IConsumer<string, string>>();
-
         }
 
         public async Task<IEventConsumer> ConsumeAsync<TEvent>() where TEvent : IEvent
