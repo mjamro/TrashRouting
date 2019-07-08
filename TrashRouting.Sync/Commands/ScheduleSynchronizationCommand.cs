@@ -8,14 +8,14 @@ namespace TrashRouting.Sync.Commands
     [MessageNamespace("sync")]
     public class ScheduleSynchronizationCommand : ICommand
     {
-        public string RequestesById { get; set; }
-        public DateTime RunDate { get; set; }
-        public string Message { get; set; }
+        public string RequestedById { get; }
+        public DateTime RunDate { get; }
+        public string Message { get; }
 
         [JsonConstructor]
         public ScheduleSynchronizationCommand(string requestesById, DateTime runDate, string message)
         {
-            RequestesById = requestesById;
+            RequestedById = requestesById;
             RunDate = runDate;
             Message = message;
         }

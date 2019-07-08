@@ -7,5 +7,8 @@ namespace TrashRouting.Common.RabbitMq
     {
         IBusSubscriber SubscribeCommand<TCommand>(string rabbitNamespace = null, string queueName = null,
             Func<TCommand> onError = null) where TCommand : ICommand;
+
+        IBusSubscriber SubscribeEvent<TEvent>(string rabbitNamespace = null, string queueName = null,
+            Func<TEvent> onError = null) where TEvent : IEvent;
     }
 }

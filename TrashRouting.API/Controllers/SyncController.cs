@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TrashRouting.API.Commands;
-using TrashRouting.Common.RabbitMq;
+using TrashRouting.Common.Messaging;
 using TrashRouting.Common.RabbitMQ;
 
 namespace TrashRouting.API.Controllers

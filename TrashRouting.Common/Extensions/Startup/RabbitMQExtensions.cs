@@ -6,12 +6,11 @@ using RawRabbit.Common;
 using RawRabbit.Configuration;
 using RawRabbit.Enrichers.MessageContext;
 using RawRabbit.Instantiation;
-using RawRabbit.Pipe;
-using RawRabbit.Pipe.Middleware;
 using System;
 using System.Reflection;
 using TrashRouting.Common.Attributes;
 using TrashRouting.Common.Contracts;
+using TrashRouting.Common.Messaging;
 using TrashRouting.Common.RabbitMq;
 using TrashRouting.Common.RabbitMQ;
 

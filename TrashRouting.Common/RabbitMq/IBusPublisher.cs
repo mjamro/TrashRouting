@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using TrashRouting.Common.Contracts;
+using TrashRouting.Common.Messaging;
 
 namespace TrashRouting.Common.RabbitMQ
 {
@@ -7,5 +8,8 @@ namespace TrashRouting.Common.RabbitMQ
     {
         Task SendAsync<TCommand>(TCommand command, ICorrelationContext context) 
             where TCommand : ICommand;
+
+        Task PublishAsync<TEvent>(TEvent @event, ICorrelationContext context)
+            where TEvent : IEvent;
     }
 }

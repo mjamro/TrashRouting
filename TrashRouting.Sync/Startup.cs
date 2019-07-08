@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using TrashRouting.Common.Extensions.Startup;
 using TrashRouting.Sync.Commands;
+using TrashRouting.Sync.Events;
 
 namespace TrashRouting.Sync
 {
@@ -81,7 +82,8 @@ namespace TrashRouting.Sync
             app.UseMvc();
 
             app.UseRabbitMq()
-                .SubscribeCommand<ScheduleSynchronizationCommand>();
+                .SubscribeCommand<ScheduleSynchronizationCommand>()
+                .SubscribeEvent<SynchronizationScheduledEvent>();
 
             app.UseConsul(lifetime);
         }

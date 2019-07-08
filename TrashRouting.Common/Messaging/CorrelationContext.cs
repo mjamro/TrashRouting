@@ -1,7 +1,6 @@
 ﻿using System;
-using TrashRouting.Common.RabbitMQ;
 
-namespace TrashRouting.Common.RabbitMq
+namespace TrashRouting.Common.Messaging
 {
     public class CorrelationContext : ICorrelationContext
     {

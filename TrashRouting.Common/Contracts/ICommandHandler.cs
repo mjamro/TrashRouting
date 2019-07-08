@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using TrashRouting.Common.RabbitMQ;
+using TrashRouting.Common.Messaging;
 
 namespace TrashRouting.Common.Contracts
 {

@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using RawRabbit;
-using TrashRouting.Common.Contracts;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using RawRabbit;
+using System;
+using TrashRouting.Common.Contracts;
+using TrashRouting.Common.Messaging;
 
 namespace TrashRouting.Common.RabbitMq
 {
@@ -22,6 +23,17 @@ namespace TrashRouting.Common.RabbitMq
             busClient.SubscribeAsync<TCommand, CorrelationContext>(async (command, context) =>
             {
                 var handler = serviceProvider.GetService<ICommandHandler<TCommand>>();
+                await handler.HandleAsync(command);
+            });
+
+            return this;
+        }
+
+        public IBusSubscriber SubscribeEvent<TEvent>(string rabbitNamespace = null, string queueName = null, Func<TEvent> onError = null) where TEvent : IEvent
+        {
+            busClient.SubscribeAsync<TEvent, CorrelationContext>(async (command, context) =>
+            {
+                var handler = serviceProvider.GetService<IEventHandler<TEvent>>();
                 await handler.HandleAsync(command);
             });
 

@@ -13,6 +13,48 @@ namespace TrashRouting.Cluster.Controllers
     {
         [HttpGet("algdata")]
         public async Task<ClusterAlgData> AlgData()
+            => GetClusterAlgData();
+
+        [HttpGet("point/{id}")]
+        public async Task<Point> Point(int id)
+        {
+            return new Point
+            {
+                Id = id,
+                Type = "attraction",
+                Latitude = 52.53223,
+                Longitude = 23.24135
+            };
+        }
+
+        [HttpGet("riskypoint/{id}")]
+        public async Task<Point> RiskyPoint(int id)
+        {
+            if (id > 5)
+                throw new Exception("Getting point from database failed.");
+
+            return new Point
+            {
+                Id = id,
+                Type = "attraction",
+                Latitude = 52.53223,
+                Longitude = 23.24135
+            };
+        }
+
+        [HttpPost("schedule")]
+        public async Task<IActionResult> Schedule(ScheduleClusterAlgorithmCommand command)
+        {
+            if (command.PointsNumber > 1000)
+                return StatusCode(500);
+
+            if (command.PointsNumber < 0)
+                return BadRequest();
+
+            return Ok();
+        }
+
+        private static ClusterAlgData GetClusterAlgData()
         {
             return new ClusterAlgData()
             {
@@ -54,44 +96,6 @@ namespace TrashRouting.Cluster.Controllers
                     }
                 }
             };
-        }
-
-        [HttpGet("point/{id}")]
-        public async Task<Point> Point(int id)
-        {
-            return new Point
-            {
-                Id = id,
-                Type = "attraction",
-                Latitude = 52.53223,
-                Longitude = 23.24135
-            };
-        }
-
-        [HttpGet("riskypoint/{id}")]
-        public async Task<Point> RiskyPoint(int id)
-        {
-            if (id > 5)
-                throw new Exception("Getting point from database failed.");
-            return new Point
-            {
-                Id = id,
-                Type = "attraction",
-                Latitude = 52.53223,
-                Longitude = 23.24135
-            };
-        }
-
-        [HttpPost("schedule")]
-        public async Task<IActionResult> Schedule(ScheduleClusterAlgorithmCommand command)
-        {
-            if (command.PointsNumber > 1000)
-                return StatusCode(500);
-
-            if(command.PointsNumber < 0)
-                return BadRequest();
-
-            return Ok();
         }
     }
 }
