@@ -1,33 +1,36 @@
 ﻿using Confluent.Kafka;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using System;
-using System.Threading.Tasks;
+using System.Reflection;
+using TrashRouting.Common.Attributes;
 using TrashRouting.Common.Contracts;
+using TrashRouting.Common.Extensions;
 
 namespace TrashRouting.Common.Kafka
 {
-    public class KafkaConsumer : IEventConsumer
+    public class KafkaConsumer<TEvent> where TEvent : IEvent
     {
-        private readonly IConsumer<string, string> consumer;
-        private readonly IServiceProvider serviceProvider;
+        private readonly IConsumer<string, TEvent> consumer;
 
-        public KafkaConsumer(IApplicationBuilder app)
+        public KafkaConsumer(ConsumerConfig consumerConfig)
         {
-            serviceProvider = app.ApplicationServices.GetService<IServiceProvider>();
-            consumer = serviceProvider.GetService<IConsumer<string, string>>();
+            var consumerBuilder = new ConsumerBuilder<string, TEvent>(consumerConfig);
+
+            consumer = consumerBuilder.Build();
+
+            consumer.Subscribe(GetTopicName());
         }
 
-        public async Task<IEventConsumer> ConsumeAsync<TEvent>() where TEvent : IEvent
+        public TEvent ReadMessage()
         {
-            var @event = consumer.Consume();
+            var consumeResult = consumer.Consume();
+            return consumeResult.Value;
+        }
 
-            var handler = serviceProvider.GetService<IEventHandler<TEvent>>();
+        public static string GetTopicName()
+        {
+            var @namespace = typeof(TEvent).GetCustomAttribute<MessageNamespaceAttribute>()?.Namespace;
+            var separatedNamespace = string.IsNullOrWhiteSpace(@namespace) ? string.Empty : $"{@namespace}.";
 
-            await handler.HandleAsync(JsonConvert.DeserializeObject<TEvent>(@event.Value));
-
-            return this;
+            return $"{separatedNamespace}{typeof(TEvent).Name.Underscore()}".ToLowerInvariant();
         }
     }
 }

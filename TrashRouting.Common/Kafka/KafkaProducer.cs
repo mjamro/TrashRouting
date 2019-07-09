@@ -13,27 +13,24 @@ namespace TrashRouting.Common.Kafka
 {
     public class KafkaProducer : IEventProducer
     {
-        private readonly IServiceProvider serviceProvider;
-        private readonly ProducerBuilder<string, string> producerBuilder;
+        private readonly ProducerConfig config;
 
-        public KafkaProducer(IConfiguration configuration, IServiceProvider serviceProvider)
+        public KafkaProducer(IConfiguration configuration)
         {
             var config = new ProducerConfig();
             configuration.Bind(config);
-
-            producerBuilder = new ProducerBuilder<string, string>(config);
-            this.serviceProvider = serviceProvider;
         }
 
-        // TODO: Implementation handler in other service
         public async Task PublishAsync<TEvent>(TEvent @event, ICorrelationContext context) where TEvent : IEvent
         {
+            var producerBuilder = new ProducerBuilder<string, TEvent>(config);
+
             using (var producer = producerBuilder.Build())
             {
-                var message = new Message<string, string>()
+                var message = new Message<string, TEvent>()
                 {
                     Key = Guid.NewGuid().ToString(),
-                    Value = JsonConvert.SerializeObject(@event)
+                    Value = @event
                 };
 
                 await producer.ProduceAsync(nameof(@event), message);

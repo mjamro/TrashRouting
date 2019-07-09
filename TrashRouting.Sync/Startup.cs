@@ -1,7 +1,5 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
-using Consul;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +13,7 @@ using System.Text;
 using TrashRouting.Common.Extensions.Startup;
 using TrashRouting.Sync.Commands;
 using TrashRouting.Sync.Events;
+using TrashRouting.Sync.Services.Background;
 
 namespace TrashRouting.Sync
 {
@@ -34,6 +33,8 @@ namespace TrashRouting.Sync
             services.AddConsul();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddHostedService<ProcessEventBackgroundService<SynchronizationScheduledEvent>>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
