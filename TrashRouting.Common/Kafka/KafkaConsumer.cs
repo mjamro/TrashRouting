@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using System;
 using System.Reflection;
 using TrashRouting.Common.Attributes;
 using TrashRouting.Common.Contracts;
@@ -19,9 +20,9 @@ namespace TrashRouting.Common.Kafka
             consumer.Subscribe(GetTopicName());
         }
 
-        public TEvent ReadMessage()
+        public TEvent ReadMessage(TimeSpan timeout)
         {
-            var consumeResult = consumer.Consume();
+            var consumeResult = consumer.Consume(timeout);
             return consumeResult.Value;
         }
 

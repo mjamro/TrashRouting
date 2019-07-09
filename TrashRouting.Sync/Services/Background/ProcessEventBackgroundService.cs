@@ -31,7 +31,7 @@ namespace TrashRouting.Sync.Services.Background
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                var @event = consumer.ReadMessage();
+                var @event = consumer.ReadMessage(TimeSpan.FromMilliseconds(5000));
 
                 var handler = serviceProvider.GetService<IEventHandler<TEvent>>();
 
