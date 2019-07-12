@@ -5,11 +5,12 @@ using TrashRouting.Common.Enums;
 
 namespace TrashRouting.Common.Saga
 {
-    public interface ISagaState
+    public interface ISaga
     {
         string SagaId { get; }
-        object Data { get; }
         SagaState State { get; }
-        IEnumerable<Exception> Errors { get; }
+        void Initialize();
+        void Complete();
+        void Reject();
     }
 }

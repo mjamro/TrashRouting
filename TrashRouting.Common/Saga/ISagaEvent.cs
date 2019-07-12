@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading.Tasks;
 
 namespace TrashRouting.Common.Saga
 {
     public interface ISagaEvent<TEvent>
     {
-        Task HandleAsync(TEvent, ISagaContext sagaContext)
+        Task HandleAsync(TEvent @event, ISagaContext sagaContext);
     }
 }

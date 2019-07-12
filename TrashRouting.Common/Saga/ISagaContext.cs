@@ -5,8 +5,9 @@ namespace TrashRouting.Common.Saga
 {
     public interface ISagaContext
     {
-        string SagaId { get; }
+        Guid CorrelationId { get; }
         IDictionary<string, object> Metadata { get; }
-        IEnumerable<Exception> Errors { get; }
+        ICollection<Exception> Errors { get; }
+        void AddError(Exception ex);
     }
 }
