@@ -1,4 +1,5 @@
-﻿using Consul;
+﻿using Autofac;
+using Consul;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@ namespace TrashRouting.Routes
             Configuration = configuration;
         }
 
+        public IContainer Container { get; private set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -62,7 +64,7 @@ namespace TrashRouting.Routes
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            app.UseConsul(lifetime);
+            app.UseConsul(lifetime, Container);
         }
     }
 }

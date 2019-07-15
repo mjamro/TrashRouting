@@ -1,0 +1,43 @@
+version: "3.5"
+
+services:
+  consul:
+    image: consul
+    container_name: consul
+    ports:
+      - 8500:8500
+    networks:
+      - trashRouting
+    # network_mode: host
+    volumes:
+      - consul:/consul/data
+
+  fabio:
+    image: fabiolb/fabio
+    container_name: fabio
+    environment:
+      - FABIO_REGISTRY_CONSUL_ADDR=consul:8500
+    networks:
+      - trashRouting
+    # network_mode: host
+    ports:
+     - 9998:9998
+     - 9999:9999
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - trashRouting
+
+networks:
+  trashRouting:
+    name: trashRouting-network
+    external: true
+    
+volumes:
+  consul:
+    driver: local

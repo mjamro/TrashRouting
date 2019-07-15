@@ -13,11 +13,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrashRouting.Sync", "TrashR
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56BB172F-F289-4405-9F90-2C09856F1B34}"
 	ProjectSection(SolutionItems) = preProject
-		consul-rabbit.yml = consul-rabbit.yml
 		consul.yml = consul.yml
-		docker-cluster.yml = docker-cluster.yml
 		docker-compose.yml = docker-compose.yml
+		docker-routes.yml = docker-routes.yml
 		dotnet-run-all.sh = dotnet-run-all.sh
+		rabbit-fabio-consul.yml = rabbit-fabio-consul.yml
+		rabbit-fabio.yml = rabbit-fabio.yml
 		rabbit.yml = rabbit.yml
 	EndProjectSection
 EndProject

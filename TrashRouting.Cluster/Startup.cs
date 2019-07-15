@@ -1,4 +1,6 @@
-﻿using Consul;
+﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Consul;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Reflection;
 using System.Text;
 using TrashRouting.Common.Extensions.Startup;
 
@@ -19,10 +22,11 @@ namespace TrashRouting.Cluster
             Configuration = configuration;
         }
 
+        public IContainer Container { get; private set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddConsul();
 
@@ -44,6 +48,18 @@ namespace TrashRouting.Cluster
                         ValidIssuer = Configuration["Jwt:Issuer"]
                     };
                 });
+
+
+            var builder = new ContainerBuilder();
+            builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
+                    .AsImplementedInterfaces();
+            builder.Populate(services);
+
+            builder.AddRabbitMq(Configuration.GetSection("RabbitMq"));
+
+            Container = builder.Build();
+
+            return new AutofacServiceProvider(Container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,7 +78,7 @@ namespace TrashRouting.Cluster
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            app.UseConsul(lifetime);
+            app.UseConsul(lifetime, Container);
         }
     }
 }

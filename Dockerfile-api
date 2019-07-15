@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+WORKDIR /app
+EXPOSE 5000
+
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+WORKDIR /src
+COPY ["TrashRouting.API/TrashRouting.API.csproj", "TrashRouting.API/"]
+COPY ["TrashRouting.Common/TrashRouting.Common.csproj", "TrashRouting.Common/"]
+RUN dotnet restore "TrashRouting.API/TrashRouting.API.csproj"
+COPY . .
+WORKDIR "/src/TrashRouting.API"
+RUN dotnet build "TrashRouting.API.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "TrashRouting.API.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "TrashRouting.API.dll"]

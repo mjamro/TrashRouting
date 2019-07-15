@@ -1,12 +1,12 @@
 version: "3.5"
 
 services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
+  trash-routing-cluster:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-routes
     ports:
-      - 5672:5672
-      - 15672:15672
+      - '5020:5020'  
     networks:
       - trashRouting
 

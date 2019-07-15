@@ -78,7 +78,7 @@ namespace TrashRouting.API
             app.UseHttpsRedirection();
             app.UseMvc();
 
-            app.UseConsul(lifetime);
+            app.UseConsul(lifetime, Container);
         }
     }
 }

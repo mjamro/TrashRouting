@@ -85,7 +85,7 @@ namespace TrashRouting.Sync
                 .SubscribeCommand<ScheduleSynchronizationCommand>()
                 .SubscribeEvent<SynchronizationScheduledEvent>();
 
-            app.UseConsul(lifetime);
+            app.UseConsul(lifetime, Container);
         }
     }
 }

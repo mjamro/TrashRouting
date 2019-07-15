@@ -1,4 +1,5 @@
-﻿using Consul;
+﻿using Autofac;
+using Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,7 @@ namespace TrashRouting.Common.Extensions.Startup
         }
 
         public static IApplicationBuilder UseConsul(this IApplicationBuilder app,
-         IApplicationLifetime lifetime)
+         IApplicationLifetime lifetime, IContainer container)
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {
@@ -35,27 +36,34 @@ namespace TrashRouting.Common.Extensions.Startup
 
                 var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
 
-                var uri = new Uri(configuration["Consul:ServiceAddress"]);
+                var servicePort = configuration["Consul:ServicePort"];
+                var address = $"{configuration["Consul:ServiceAddress"]}";
+
+                var scheme = address.StartsWith("http", StringComparison.InvariantCultureIgnoreCase)
+                       ? string.Empty
+                       : "http://";
+
                 var registration = new AgentServiceRegistration()
                 {
-                    ID = $"{configuration["Consul:ServiceID"]}-{uri.Port}",
-                    Name = configuration["Consul:ServiceName"],
-                    Address = $"{uri.Scheme}://{uri.Host}",
-                    Port = uri.Port,
-                    Tags = configuration.GetSection("Consul:Tags")
-                    .AsEnumerable()
-                    .Select(c => c.Value)
-                    .Where(c => !string.IsNullOrEmpty(c))
-                    .ToArray()
+                    ID = $"{configuration["Consul:ServiceID"]}-{servicePort}",
+                    Name = $"{configuration["Consul:ServiceName"]}-{servicePort}",
+                    Address = address,
+                    Port = Int32.Parse(configuration["Consul:ServicePort"]),
+                    Tags = Convert.ToBoolean(configuration["Fabio:Enabled"]) ? 
+                        PrepareFabioTags(configuration["Fabio:ServiceName"]) : 
+                        null
                 };
 
-                var healthCheck = new AgentServiceCheck
+                if(!string.IsNullOrEmpty(configuration["Consul:PingEndpoint"]))
                 {
-                    Interval = TimeSpan.FromSeconds(10.0),
-                    DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(30.0),
-                    HTTP = $"{uri.Scheme}://{uri.Host}:{uri.Port}/{configuration["Consul:PingEndpoint"]}"
-                };
-                registration.Checks = new[] { healthCheck };
+                    var healthCheck = new AgentServiceCheck
+                    {
+                        Interval = TimeSpan.FromSeconds(10.0),
+                        DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(30.0),
+                        HTTP = $"{scheme}{address}:{servicePort}/{configuration["Consul:PingEndpoint"]}"
+                    };
+                    registration.Checks = new[] { healthCheck };
+                }
 
                 consulClient.Agent.ServiceDeregister(registration.ID).Wait();
                 consulClient.Agent.ServiceRegister(registration).Wait();
@@ -63,10 +71,15 @@ namespace TrashRouting.Common.Extensions.Startup
                 lifetime.ApplicationStopping.Register(() =>
                 {
                     consulClient.Agent.ServiceDeregister(registration.ID).Wait();
+                    container.Dispose();
                 });
 
                 return app;
             }
         }
+
+        private static string[] PrepareFabioTags(string serviceName)
+            => new string[] { $"urlprefix-/{serviceName} strip=/{serviceName}" };
+
     }
 }

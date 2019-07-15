@@ -15,7 +15,6 @@ namespace TrashRouting.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
         private readonly IRouteService routeService;
