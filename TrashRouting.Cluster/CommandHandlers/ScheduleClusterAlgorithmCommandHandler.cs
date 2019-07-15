@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TrashRouting.Cluster.Commands;
 using TrashRouting.Common.Contracts;
+using TrashRouting.Common.Messaging;
 using TrashRouting.Common.RabbitMQ;
 
 namespace TrashRouting.Cluster.CommandHandlers

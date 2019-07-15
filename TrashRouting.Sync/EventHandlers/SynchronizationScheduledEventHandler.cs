@@ -8,7 +8,7 @@ namespace TrashRouting.Sync.EventHandlers
 {
     public class SynchronizationScheduledEventHandler : IEventHandler<SynchronizationScheduledEvent>
     {
-        private readonly ILogger<SynchronizationScheduledEventHandler> logger;
+        private ILogger<SynchronizationScheduledEventHandler> logger;
 
         public SynchronizationScheduledEventHandler(ILogger<SynchronizationScheduledEventHandler> logger)
         {
@@ -20,7 +20,7 @@ namespace TrashRouting.Sync.EventHandlers
 
         public Task HandleAsync(SynchronizationScheduledEvent @event, ICorrelationContext context)
         {
-            logger.LogInformation($"{nameof(@event)} handling");
+            logger.LogInformation($"SynchronizationScheduledEvent {context.Id}");
             return Task.CompletedTask;
         }
     }

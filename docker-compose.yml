@@ -3,8 +3,8 @@ version: "3.5"
 services:
   trash-routing-api:
     build:
-      context: ./TrashRouting.Api/
-      dockerfile: ./Dockerfile
+      context: .
+      dockerfile: ./Dockerfile-api
     ports:
       - '5000:5000'
     networks:
@@ -14,8 +14,8 @@ services:
 
   trash-routing-cluster:
     build:
-      context: ./TrashRouting.Cluster/
-      dockerfile: ./Dockerfile
+      context: .
+      dockerfile: ./Dockerfile-cluster
     ports:
       - '5010:5010'  
     networks:
@@ -25,8 +25,8 @@ services:
       
   trash-routing-routes:
     build:
-      context: ./TrashRouting.Routes/
-      dockerfile: ./Dockerfile
+      context: .
+      dockerfile: ./Dockerfile-routes
     ports:
       - '5020:5020'  
     networks:
@@ -36,8 +36,8 @@ services:
       
   trash-routing-sync:
     build:
-      context: ./TrashRouting.Sync/
-      dockerfile: ./Dockerfile
+      context: .
+      dockerfile: ./Dockerfile-sync
     ports:
       - '5030:5030'  
     networks:

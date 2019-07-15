@@ -13,6 +13,6 @@ namespace TrashRouting.Common.Messaging
         string Resource { get; }
         string Culture { get; }
         DateTime CreatedAt { get; }
-        int Retries { get; set; }
+        int Retries { get; }
     }
 }

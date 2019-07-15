@@ -1,7 +1,5 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
-using Consul;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +11,7 @@ using System;
 using System.Reflection;
 using System.Text;
 using TrashRouting.Common.Extensions.Startup;
+using TrashRouting.Common.Saga;
 using TrashRouting.Sync.Commands;
 using TrashRouting.Sync.Events;
 
@@ -51,6 +50,8 @@ namespace TrashRouting.Sync
                         ValidIssuer = Configuration["Jwt:Issuer"]
                     };
                 });
+
+            services.AddTransient<ISagaCoordinator, SagaCoordinator>();
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())

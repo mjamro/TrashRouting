@@ -4,34 +4,43 @@ namespace TrashRouting.Common.Messaging
 {
     public class CorrelationContext : ICorrelationContext
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; }
 
-        public Guid UserId { get; set; }
+        public Guid UserId { get; }
 
-        public Guid ResourceId { get; set; }
+        public Guid ResourceId { get; }
 
-        public string ConnectionId { get; set; }
+        public string ConnectionId { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public string Origin { get; set; }
+        public string Origin { get; }
 
-        public string Resource { get; set; }
+        public string Resource { get;  }
 
-        public string Culture { get; set; }
+        public string Culture { get; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; }
 
-        public int Retries { get; set; }
+        public int Retries { get; }
 
         public CorrelationContext()
         {
+            Id = Guid.NewGuid();
+        }
 
+        public CorrelationContext(Guid id)
+        {
+            Id = id;
         }
 
         public static CorrelationContext Create()
-        {
-            return new CorrelationContext();
-        }
+            => new CorrelationContext();
+
+        public static CorrelationContext Create(Guid correlationId)
+            => new CorrelationContext(correlationId);
+
+        public static CorrelationContext Create(string correlationId)
+           => new CorrelationContext(Guid.Parse(correlationId));
     }
 }

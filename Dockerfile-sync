@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+WORKDIR /app
+EXPOSE 5030
+
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+WORKDIR /src
+COPY ["TrashRouting.Sync/TrashRouting.Sync.csproj", "TrashRouting.Sync/"]
+COPY ["TrashRouting.Common/TrashRouting.Common.csproj", "TrashRouting.Common/"]
+RUN dotnet restore "TrashRouting.Sync/TrashRouting.Sync.csproj"
+COPY . .
+WORKDIR "/src/TrashRouting.Sync"
+RUN dotnet build "TrashRouting.Sync.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish "TrashRouting.Sync.csproj" -c Release -o /app
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENV ASPNETCORE_URLS http://*:5030
+ENTRYPOINT ["dotnet", "TrashRouting.Sync.dll"]

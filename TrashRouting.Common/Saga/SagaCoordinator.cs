@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using TrashRouting.Common.Enums;
 
 namespace TrashRouting.Common.Saga
 {
@@ -15,7 +16,6 @@ namespace TrashRouting.Common.Saga
 
         public async Task ProcessAsync<TMessage>(
             TMessage message, 
-            ISagaEvent<TMessage> sagaEvent,
             ISagaContext context, 
             Func<TMessage, Task> onCompleted = null, 
             Func<TMessage, Task> onRejected = null)
@@ -32,7 +32,7 @@ namespace TrashRouting.Common.Saga
 
             foreach (var action in actions)
             {
-                sagaTasks.Add(ProcessActionAsync(message, sagaEvent, context, onCompleted, onRejected));
+                sagaTasks.Add(ProcessActionAsync(message, action, context, onCompleted, onRejected));
             }
 
             await Task.WhenAll(sagaTasks);
@@ -54,17 +54,24 @@ namespace TrashRouting.Common.Saga
             }
             catch(Exception ex)
             {
-                context.AddError(ex); 
+                context.AddError(ex);
+                saga.Reject();
             }
             finally
             {
                 Semaphore.Release();
             }
 
-
-            // checking state 
+            if(saga.State is SagaState.Rejected)
+            {
+                await onRejected(message);
+                //compensate
+            }
+            else if (saga.State is SagaState.Completed)
+            {
+                await onCompleted(message);
+            }
 
         }
-
     }
 }
