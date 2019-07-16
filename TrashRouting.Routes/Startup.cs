@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using TrashRouting.Common.Extensions.Startup;
+using TrashRouting.Common.Saga;
 
 namespace TrashRouting.Routes
 {
@@ -46,6 +47,8 @@ namespace TrashRouting.Routes
                         ValidIssuer = Configuration["Jwt:Issuer"]
                     };
                 });
+
+            services.AddSaga();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

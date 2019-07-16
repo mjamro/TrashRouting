@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{56BB172F-F289-4405-9F90-2C09856F1B34}"
 	ProjectSection(SolutionItems) = preProject
 		consul.yml = consul.yml
+		docker-api.yml = docker-api.yml
 		docker-compose.yml = docker-compose.yml
 		docker-routes.yml = docker-routes.yml
 		Dockerfile-api = Dockerfile-api
@@ -22,8 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile-sync = Dockerfile-sync
 		dotnet-run-all.sh = dotnet-run-all.sh
 		rabbit-fabio-consul.yml = rabbit-fabio-consul.yml
-		rabbit-fabio.yml = rabbit-fabio.yml
-		rabbit.yml = rabbit.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrashRouting.Common", "TrashRouting.Common\TrashRouting.Common.csproj", "{5E28A6D3-2BB7-4DF9-A8ED-C86D5E096A20}"

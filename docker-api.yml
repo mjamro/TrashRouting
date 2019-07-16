@@ -6,18 +6,7 @@ services:
       context: .
       dockerfile: ./Dockerfile-api
     ports:
-      - '5000:5000'
-    networks:
-      - trashRouting
-    environment:
-      - 'EXAMPLEVARIABLE=example'
-
-  trash-routing-cluster:
-    build:
-      context: .
-      dockerfile: ./Dockerfile-routes
-    ports:
-      - '5020:5020'  
+      - '5000:5000'  
     networks:
       - trashRouting
 

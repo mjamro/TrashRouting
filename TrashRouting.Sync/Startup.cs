@@ -51,7 +51,7 @@ namespace TrashRouting.Sync
                     };
                 });
 
-            services.AddTransient<ISagaCoordinator, SagaCoordinator>();
+            services.AddSaga();
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())

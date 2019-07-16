@@ -49,6 +49,8 @@ namespace TrashRouting.API
                     };
                 });
 
+            services.AddSaga();
+
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();

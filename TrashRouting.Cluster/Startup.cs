@@ -49,6 +49,7 @@ namespace TrashRouting.Cluster
                     };
                 });
 
+            services.AddSaga();
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())

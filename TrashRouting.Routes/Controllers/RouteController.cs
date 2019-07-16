@@ -13,18 +13,6 @@ namespace TrashRouting.Routes.Controllers
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
-        private readonly IBusPublisher busPublisher;
-
-        //public RouteController(IBusPublisher busPublisher)
-        //{
-        //    this.busPublisher = busPublisher;
-        //}
-
-        public RouteController()
-        {
-
-        }
-
         [HttpGet("{id}")]
         public async Task<Route> Route(int id)
         {

@@ -1,5 +1,6 @@
 ﻿using Consul;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Polly;
 using RestEase;
 using System;
@@ -19,12 +20,17 @@ namespace TrashRouting.API.Controllers
     {
         private readonly IClusterService clusterService;
 
-        public ClusterController(IConsulClient consulClient)
+        //public ClusterController(IConsulClient consulClient)
+        //{
+        //    var query = consulClient.Catalog.Service("service-cluster").GetAwaiter().GetResult();
+        //    var serviceInstance = query.Response.First();
+        //    clusterService = RestClient
+        //        .For<IClusterService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
+        //}
+
+        public ClusterController(IConfiguration configuration)
         {
-            var query = consulClient.Catalog.Service("service-cluster").GetAwaiter().GetResult();
-            var serviceInstance = query.Response.First();
-            clusterService = RestClient
-                .For<IClusterService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
+            clusterService = RestClient.For<IClusterService>($"{configuration["Fabio:Url"]}/cluster");
         }
 
         [HttpGet("algdata")]

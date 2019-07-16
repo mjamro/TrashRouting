@@ -1,10 +1,9 @@
-﻿using Consul;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using RestEase;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TrashRouting.API.Commands;
@@ -15,6 +14,7 @@ namespace TrashRouting.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class RouteController : ControllerBase
     {
         private readonly IRouteService routeService;
@@ -34,12 +34,18 @@ namespace TrashRouting.API.Controllers
 
 
         // Third phase - address from consul registry
-        public RouteController(IConsulClient consulClient)
+        //public RouteController(IConsulClient consulClient)
+        //{
+        //    var query = consulClient.Catalog.Service("service-routes").GetAwaiter().GetResult();
+        //    var serviceInstance = query.Response.First();
+        //    routeService = RestClient
+        //        .For<IRouteService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
+        //}
+
+        // Fourth phase - load balancer with Fabio
+        public RouteController(IConfiguration configuration)
         {
-            var query = consulClient.Catalog.Service("service-routes").GetAwaiter().GetResult();
-            var serviceInstance = query.Response.First();
-            routeService = RestClient
-                .For<IRouteService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
+            routeService = RestClient.For<IRouteService>($"{configuration["Fabio:Url"]}/route");
         }
 
         [HttpGet("list")]
