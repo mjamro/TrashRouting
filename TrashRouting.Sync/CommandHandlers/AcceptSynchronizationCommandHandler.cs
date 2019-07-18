@@ -24,10 +24,13 @@ namespace TrashRouting.Sync.CommandHandlers
 
         public async Task HandleAsync(AcceptSynchronizationCommand command, ICorrelationContext context)
         {
-            logger.LogInformation($"{nameof(command)} {context.Id}");
+            logger.LogInformation($"{nameof(command)} ({context.Id})");
 
             await busPublisher.PublishAsync(new SynchronizationAcceptedEvent(
-                command.AcceptedById, command.Message, command.AcceptedDate), context);
+                command.AcceptedById,
+                command.AcceptedDate,
+                command.SynchronizationId,
+                command.Message), context);
         }
     }
 }

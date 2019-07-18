@@ -84,6 +84,7 @@ namespace TrashRouting.Sync
 
             app.UseRabbitMq()
                 .SubscribeCommand<ScheduleSynchronizationCommand>()
+                .SubscribeCommand<AcceptSynchronizationCommand>()
                 .SubscribeEvent<SynchronizationScheduledEvent>();
 
             app.UseConsul(lifetime, Container);

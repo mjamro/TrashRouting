@@ -20,7 +20,7 @@ namespace TrashRouting.Sync.EventHandlers
 
         public Task HandleAsync(SynchronizationScheduledEvent @event, ICorrelationContext context)
         {
-            logger.LogInformation($"SynchronizationScheduledEvent {context.Id}");
+            logger.LogInformation($"{nameof(@event)} ({context.Id})");
             return Task.CompletedTask;
         }
     }

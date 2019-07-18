@@ -23,7 +23,7 @@ namespace TrashRouting.Sync.CommandHandlers
 
         public async Task HandleAsync(ScheduleSynchronizationCommand command, ICorrelationContext context)
         {
-            logger.LogInformation($"{nameof(command)} {context.Id}");
+            logger.LogInformation($"{nameof(command)} ({context.Id})");
 
             await busPublisher.PublishAsync(
                   new SynchronizationScheduledEvent(

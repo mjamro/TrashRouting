@@ -38,11 +38,17 @@ namespace TrashRouting.API.Controllers
         [HttpPost("schedule")]
         public async Task<IActionResult> ScheduleSynchronization(ScheduleSynchronizationCommand command)
         {
-            //TODO: CorrelationContext
             await busPublisher.SendAsync(command, CorrelationContext.Create());
 
             return Accepted();
         }
 
+        [HttpPost("accept")]
+        public async Task<IActionResult> AcceptSynchronization(AcceptSynchronizationCommand command)
+        {
+            await busPublisher.SendAsync(command, CorrelationContext.Create());
+
+            return Accepted();
+        }
     }
 }

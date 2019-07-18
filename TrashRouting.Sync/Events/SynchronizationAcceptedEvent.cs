@@ -9,13 +9,15 @@ namespace TrashRouting.Sync.Events
     {
         public string AcceptedById { get; }
         public string Message { get; }
+        public int SynchronizationId { get; }
         public DateTime AcceptedDate { get; }
 
-        public SynchronizationAcceptedEvent(string acceptedById, string message, DateTime acceptedDate)
+        public SynchronizationAcceptedEvent(string acceptedById, DateTime acceptedDate, int synchronizationId, string message)
         {
             AcceptedById = acceptedById;
-            Message = message;
             AcceptedDate = acceptedDate;
+            SynchronizationId = synchronizationId;
+            Message = message;
         }
     }
 }

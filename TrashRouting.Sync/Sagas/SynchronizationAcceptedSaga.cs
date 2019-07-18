@@ -33,7 +33,7 @@ namespace TrashRouting.Sync.Sagas
 
         public async Task HandleAsync(SynchronizationAcceptedEvent @event, ISagaContext sagaContext)
         {
-            logger.LogInformation($"{nameof(@event)} {sagaContext.CorrelationId}");
+            logger.LogInformation($"{nameof(@event)} ({sagaContext.CorrelationId}) {this.GetType()}");
 
             await busPublisher.SendAsync(
                 new MergeSynchronizationDataCommand(), 
@@ -42,7 +42,7 @@ namespace TrashRouting.Sync.Sagas
 
         public Task HandleAsync(SynchronizationDataMergedEvent @event, ISagaContext sagaContext)
         {
-            logger.LogInformation($"{nameof(@event)} {sagaContext.CorrelationId}");
+            logger.LogInformation($"{nameof(@event)} ({sagaContext.CorrelationId}) {this.GetType()}");
 
             // send email notification command
             return Task.CompletedTask;
