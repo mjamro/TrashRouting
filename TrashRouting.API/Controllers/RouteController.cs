@@ -25,13 +25,11 @@ namespace TrashRouting.API.Controllers
         //    routeService = RestClient.For<IRouteService>("http://localhost:5020");
         //}
 
-
         // Second phase - service address from appsettings 
         //public RouteController(IConsulClient consulClient, IConfiguration configuration)
         //{
         //    routeService = RestClient.For<IRouteService>(configuration["Services:Route:Address"]);
         //}
-
 
         // Third phase - address from consul registry
         //public RouteController(IConsulClient consulClient)

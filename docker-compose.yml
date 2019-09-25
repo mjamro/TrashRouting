@@ -10,7 +10,7 @@ services:
     networks:
       - trashRouting
     environment:
-      - 'EXAMPLEVARIABLE=example'
+      - 'ASPNETCORE_ENVIRONMENT=docker'
 
   trash-routing-cluster:
     build:
@@ -21,7 +21,7 @@ services:
     networks:
       - trashRouting
     environment:
-      - 'EXAMPLEVARIABLE=example'
+      - 'ASPNETCORE_ENVIRONMENT=docker'
       
   trash-routing-routes:
     build:
@@ -32,7 +32,7 @@ services:
     networks:
       - trashRouting
     environment:
-      - 'EXAMPLEVARIABLE=example'
+      - 'ASPNETCORE_ENVIRONMENT=docker'
       
   trash-routing-sync:
     build:
@@ -43,7 +43,7 @@ services:
     networks:
       - trashRouting
     environment:
-      - 'EXAMPLEVARIABLE=example'
+      - 'ASPNETCORE_ENVIRONMENT=docker'
 
 networks:
   trashRouting:

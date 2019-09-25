@@ -21,12 +21,12 @@ namespace TrashRouting.API.Controllers
         //    this.busPublisher = busPublisher;
         //}
 
-        //public ClusterController(IConsulClient consulClient)
+        //public SyncController(IConsulClient consulClient)
         //{
-        //    var query = consulClient.Catalog.Service("service-cluster").GetAwaiter().GetResult();
+        //    var query = consulClient.Catalog.Service("service-sync").GetAwaiter().GetResult();
         //    var serviceInstance = query.Response.First();
         //    clusterService = RestClient
-        //        .For<IClusterService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
+        //        .For<ISyncService>($"{serviceInstance.ServiceAddress}:{serviceInstance.ServicePort}");
         //}
 
         public SyncController(IBusPublisher busPublisher, IConfiguration configuration)
