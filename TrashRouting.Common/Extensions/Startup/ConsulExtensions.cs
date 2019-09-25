@@ -50,8 +50,12 @@ namespace TrashRouting.Common.Extensions.Startup
                     Address = address,
                     Port = Int32.Parse(configuration["Consul:ServicePort"]),
                     Tags = Convert.ToBoolean(configuration["Fabio:Enabled"]) ? 
-                        PrepareFabioTags(configuration["Fabio:ServiceName"]) : 
-                        null
+                        PrepareFabioTags(configuration["Fabio:ServiceName"]) :
+                        configuration.GetSection("Consul:Tags")
+                            .AsEnumerable()
+                            .Select(c => c.Value)
+                            .Where(c => !string.IsNullOrEmpty(c))
+                            .ToArray()
                 };
 
                 if(!string.IsNullOrEmpty(configuration["Consul:PingEndpoint"]))
